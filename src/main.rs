@@ -2,6 +2,8 @@
 
 use itertools::Itertools;
 use std::fs;
+use std::fs::File;
+use std::io::Write;
 
 const ROM_BYTES: usize = 128;
 
