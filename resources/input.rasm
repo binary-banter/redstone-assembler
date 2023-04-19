@@ -1,0 +1,7 @@
+add r0
+adc r1
+add r2
+add r3
+mul r1
+neg
+lsl 3
