@@ -1,3 +1,5 @@
+#![allow(clippy::unusual_byte_groupings)]
+
 use itertools::Itertools;
 use std::fs;
 
@@ -93,7 +95,8 @@ fn dst_to_bits(reg: &str) -> Option<u8> {
 
 fn parse_instr(line: &str) -> Option<u8> {
     Some(match line.split_whitespace().collect_vec().as_slice() {
-        //Arith
+        // Arithmetic
+        #[allow(clippy::identity_op)]
         ["add", src] => 0b000_00_000 | src_to_bits(src)?,
         ["adc", src] => 0b000_00_001 | src_to_bits(src)?,
         ["sub", src] => 0b000_00_010 | src_to_bits(src)?,
@@ -152,20 +155,45 @@ fn parse_instr(line: &str) -> Option<u8> {
 
         ["ssr", status] => 0b_110_1_0000 | status_to_bits(status)?,
 
-        ["mov", src, dst] => 0b111_000_000 | special_to_bits(src)? | dst_to_bits(dst)?,
+        ["mov", src, dst] => 0b111_00_00_0 | special_to_bits(src)? | dst_to_bits(dst)?,
 
         _ => return None,
     })
 }
 
+const SIZE_X: isize = 32;
+const STRIDE_X: isize = -2;
+const OFFSET_X: isize = -2;
+const SIZE_Y: isize = 4;
+const STRIDE_Y: isize = 4;
+const OFFSET_Y: isize = -15;
+const STRIDE_Z: isize = -2;
+const OFFSET_Z: isize = 0;
+
+fn write_byte(x: isize, y: isize, b: u8) -> String {
+    (0..8)
+        .map(|z| z * STRIDE_Z + OFFSET_Z)
+        .zip((0..8).rev().map(|m| (b >> m) & 1 != 0))
+        .map(|(z, set)| {
+            if set {
+                format!(
+                    "setblock ~{x} ~{y} ~{z} minecraft:redstone_wall_torch[facing=east] replace\n"
+                )
+            } else {
+                format!("setblock ~{x} ~{y} ~{z} minecraft:air replace\n")
+            }
+        })
+        .collect()
+}
+
 fn main() {
     let input = fs::read_to_string("resources/input.rasm").unwrap();
 
-    let mut opcodes = Vec::with_capacity(ROM_BYTES);
+    let mut opcodes = vec![0; ROM_BYTES];
 
     for (i, line) in input.lines().enumerate() {
         match parse_instr(line) {
-            Some(i) => opcodes.push(i),
+            Some(v) => opcodes[i] = v,
             None => {
                 eprintln!("Line {i} does not contain a valid instruction `{line}`.");
                 return;
@@ -173,13 +201,13 @@ fn main() {
         }
     }
 
-    println!(
-        "{}",
-        opcodes
-            .iter()
-            .enumerate()
-            .take(10)
-            .map(|(i, b)| format!("{i}: {b:08b}\n"))
-            .collect::<String>()
-    );
+    let mut file = File::create("tododododododood").unwrap();
+
+    let mut i = 0;
+    for y in (0..SIZE_Y).map(|y| y * STRIDE_Y + OFFSET_Y) {
+        for x in (0..SIZE_X).map(|x| x * STRIDE_X + OFFSET_X) {
+            write!(file, "{}", write_byte(x, y, opcodes[i])).unwrap();
+            i += 1;
+        }
+    }
 }
