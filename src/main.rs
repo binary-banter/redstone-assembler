@@ -138,8 +138,8 @@ fn parse_instr(line: &str) -> Option<u8> {
         ["sdh", imm] => 0b101_1_0000 | imm_to_bits(imm)?,
 
         // Jump, status register:= 0b0000_NVZC
-        ["jmp"] => 0b110_00_000,
-        ["brvs"] => 0b110_00_001, // overflow set
+        ["brvs"] => 0b110_00_000, // overflow set
+        ["jmp"] => 0b110_00_001,
         ["brcs"] => 0b110_00_010, // carry set
         ["brcc"] => 0b110_00_011, // carry clear
         ["breq"] => 0b110_00_100, // eq
