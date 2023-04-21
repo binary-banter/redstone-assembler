@@ -4,6 +4,7 @@ use itertools::Itertools;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
+use std::process::Command;
 
 const ROM_BYTES: usize = 128;
 
@@ -203,7 +204,7 @@ fn main() {
         }
     }
 
-    let mut file = File::create("tododododododood").unwrap();
+    let mut file = File::create("~/minecraft/active-world/world/datapacks/redstone_assembler/data/redstone/functions/assemble.mcfunction").unwrap();
 
     let mut i = 0;
     for y in (0..SIZE_Y).map(|y| y * STRIDE_Y + OFFSET_Y) {
