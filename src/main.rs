@@ -204,7 +204,7 @@ fn main() {
         }
     }
 
-    let mut file = File::create("~/minecraft/active-world/world/datapacks/redstone_assembler/data/redstone/functions/assemble.mcfunction").unwrap();
+    let mut file = File::create("../active-world/world/datapacks/redstone_assembler/data/redstone/functions/assemble.mcfunction").unwrap();
 
     let mut i = 0;
     for y in (0..SIZE_Y).map(|y| y * STRIDE_Y + OFFSET_Y) {
