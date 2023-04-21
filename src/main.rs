@@ -138,23 +138,14 @@ fn parse_instr(line: &str) -> Option<u8> {
         ["sdh", imm] => 0b101_1_0000 | imm_to_bits(imm)?,
 
         // Jump, status register:= 0b0000_NVZC
-        ["jmp", "b"] => 0b110_00_000,
-        ["brvs", "b"] => 0b110_00_001, // overflow set
-        ["brcs", "b"] => 0b110_00_010, // carry set
-        ["brcc", "b"] => 0b110_00_011, // carry clear
-        ["breq", "b"] => 0b110_00_100, // eq
-        ["brne", "b"] => 0b110_00_101, // ne
-        ["brns", "b"] => 0b110_00_110, // negative set
-        ["brnc", "b"] => 0b110_00_111, // negative clear
-
-        ["jmp", "f"] => 0b110_10_000,
-        ["brvs", "f"] => 0b110_10_001, // overflow set
-        ["brcs", "f"] => 0b110_10_010, // carry set
-        ["brcc", "f"] => 0b110_10_011, // carry clear
-        ["breq", "f"] => 0b110_10_100, // eq
-        ["brne", "f"] => 0b110_10_101, // ne
-        ["brns", "f"] => 0b110_10_110, // negative set
-        ["brnc", "f"] => 0b110_10_111, // negative clear
+        ["jmp"] => 0b110_00_000,
+        ["brvs"] => 0b110_00_001, // overflow set
+        ["brcs"] => 0b110_00_010, // carry set
+        ["brcc"] => 0b110_00_011, // carry clear
+        ["breq"] => 0b110_00_100, // eq
+        ["brne"] => 0b110_00_101, // ne
+        ["brns"] => 0b110_00_110, // negative set
+        ["brnc"] => 0b110_00_111, // negative clear
 
         ["ssr", status] => 0b_110_1_0000 | status_to_bits(status)?,
 
