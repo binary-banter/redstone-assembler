@@ -1,10 +1,10 @@
 #![allow(clippy::unusual_byte_groupings)]
 
 use itertools::Itertools;
+use std::env::args;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
-use std::process::Command;
 
 const ROM_BYTES: usize = 128;
 
@@ -182,6 +182,7 @@ fn write_byte(x: isize, y: isize, b: u8) -> String {
 
 fn main() {
     let input = fs::read_to_string("resources/input.rasm").unwrap();
+    let function_name = args().nth(1).unwrap_or("generate".to_string());
 
     let mut opcodes = vec![0; ROM_BYTES];
 
@@ -195,7 +196,8 @@ fn main() {
         }
     }
 
-    let mut file = File::create("../active-world/world/datapacks/redstone_assembler/data/redstone/functions/assemble.mcfunction").unwrap();
+    let path = format!("../active-world/world/datapacks/redstone_assembler/data/redstone/functions/{function_name}.mcfunction");
+    let mut file = File::create(path).unwrap();
 
     let mut i = 0;
     for y in (0..SIZE_Y).map(|y| y * STRIDE_Y + OFFSET_Y) {
