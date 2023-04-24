@@ -1,7 +1,7 @@
 #![allow(clippy::unusual_byte_groupings)]
 
+use clap::Parser;
 use itertools::Itertools;
-use std::env::args;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -180,9 +180,24 @@ fn write_byte(x: isize, y: isize, b: u8) -> String {
         .collect()
 }
 
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Input file to use.
+    #[arg(short, long)]
+    input: Option<String>,
+
+    /// Output file name (without .mcfunction).
+    #[arg(short, long)]
+    output: Option<String>,
+}
+
 fn main() {
-    let input = fs::read_to_string("resources/input.rasm").unwrap();
-    let function_name = args().nth(1).unwrap_or("generate".to_string());
+    let args = Args::parse();
+    let input_name = args.input.unwrap_or("input.rasm".to_string());
+    let function_name = args.output.unwrap_or("generate".to_string());
+
+    let input = fs::read_to_string(input_name).unwrap();
 
     let mut opcodes = vec![0; ROM_BYTES];
 
