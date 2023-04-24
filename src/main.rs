@@ -2,6 +2,7 @@
 
 use clap::Parser;
 use itertools::Itertools;
+use regex::Regex;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -194,8 +195,11 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let function_name = args.output.unwrap_or(args.input.clone());
 
+    let re = Regex::new(r".*[/\\]|\.rasm").unwrap();
+    let function_name = args
+        .output
+        .unwrap_or(re.replace_all(&args.input, "").to_string());
     let input = fs::read_to_string(args.input).unwrap();
 
     let mut opcodes = vec![0; ROM_BYTES];
