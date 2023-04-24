@@ -196,7 +196,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let re = Regex::new(r".*[/\\]|\.rasm").unwrap();
+    let re = Regex::new(r".*[/\\]|\..*").unwrap();
     let function_name = args
         .output
         .unwrap_or(re.replace_all(&args.input, "").to_string());
