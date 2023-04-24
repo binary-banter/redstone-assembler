@@ -185,7 +185,7 @@ fn write_byte(x: isize, y: isize, b: u8) -> String {
 struct Args {
     /// Input file to use.
     #[arg(short, long)]
-    input: Option<String>,
+    input: String,
 
     /// Output file name (without .mcfunction).
     #[arg(short, long)]
@@ -194,10 +194,9 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let input_name = args.input.unwrap_or("input.rasm".to_string());
-    let function_name = args.output.unwrap_or("generate".to_string());
+    let function_name = args.output.unwrap_or(args.input.clone());
 
-    let input = fs::read_to_string(input_name).unwrap();
+    let input = fs::read_to_string(args.input).unwrap();
 
     let mut opcodes = vec![0; ROM_BYTES];
 
