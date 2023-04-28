@@ -101,12 +101,12 @@ fn parse_instr(line: &str) -> Option<u8> {
     Some(match line.split_whitespace().collect_vec().as_slice() {
         // Arithmetic
         #[allow(clippy::identity_op)]
-        ["add", src] => 0b000_00_000 | src_to_bits(src)?,
-        ["adc", src] => 0b000_00_001 | src_to_bits(src)?,
-        ["sub", src] => 0b000_00_010 | src_to_bits(src)?,
-        ["sbc", src] => 0b000_00_011 | src_to_bits(src)?,
-        ["cmp", src] => 0b000_00_100 | src_to_bits(src)?,
-        ["cpc", src] => 0b000_00_101 | src_to_bits(src)?,
+        ["sub", src] => 0b000_00_000 | src_to_bits(src)?,
+        ["sbc", src] => 0b000_00_001 | src_to_bits(src)?,
+        ["cmp", src] => 0b000_00_010 | src_to_bits(src)?,
+        ["cpc", src] => 0b000_00_011 | src_to_bits(src)?,
+        ["add", src] => 0b000_00_100 | src_to_bits(src)?,
+        ["adc", src] => 0b000_00_101 | src_to_bits(src)?,
         ["mul", src] => 0b000_00_110 | src_to_bits(src)?,
         ["div", src] => 0b000_00_111 | src_to_bits(src)?,
 
@@ -121,8 +121,8 @@ fn parse_instr(line: &str) -> Option<u8> {
 
         ["neg"] => 0b001_00_111,
         ["not"] => 0b001_01_111,
-        ["dec"] => 0b001_10_111,
-        ["inc"] => 0b001_11_111,
+        ["inc"] => 0b001_10_111,
+        ["dec"] => 0b001_11_111,
 
         // Store/load
         ["lds", imm] => 0b010_0_0000 | imm_to_bits(imm)?,
