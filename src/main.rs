@@ -205,7 +205,7 @@ fn main() {
     let mut opcodes = vec![0; ROM_BYTES];
 
     for (i, line) in input.lines().enumerate() {
-        match parse_instr(line.split_once("//").unwrap().0) {
+        match parse_instr(line.split_once("//").map(|x| x.0).unwrap_or(line)) {
             Some(v) => opcodes[i] = v,
             None => {
                 eprintln!("Line {i} does not contain a valid instruction `{line}`.");
